@@ -39,9 +39,11 @@ public abstract class ChatHudMixin {
         
         // Detect and intercept custom debug messages
         if (prefix != null && !prefix.isEmpty() && plainText.startsWith(prefix)) {
-            // Exclude specified messages from being blocked
-            if (plainText.startsWith(prefix + " [IRC]") || plainText.startsWith(prefix + " Bound")) {
-                return;
+            // Check whitelist lines (allow dynamic whitelist items)
+            for (String rule : SDRConfig.getWhitelistLines()) {
+                if (rule != null && !rule.trim().isEmpty() && plainText.contains(rule)) {
+                    return; // Whitelisted, bypass the blocker
+                }
             }
 
             ci.cancel();
