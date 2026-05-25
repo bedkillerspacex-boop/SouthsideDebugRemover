@@ -1,5 +1,10 @@
 # SouthsideDebugRemover (SDR)
 
+
+
+readme是gemini写的，有没有大手子写个好的pr过来？
+kaghe说的不是中文不要理他
+
 一个为 Minecraft 1.21.4 打造的、高度可自定义的 Fabric 聊天栏调试消息拦截与过滤模组。
 
 ---
