@@ -11,11 +11,12 @@ public class SDRConfig {
     private static final Path CONFIG_PATH = Path.of("config", "southsidedebugremover.properties");
     private static final Properties properties = new Properties();
 
+    private static final String DEFAULT_FILTER_RULES = "[S]";
     private static final String DEFAULT_WHITELIST = "[S] [IRC]\n[S] Bound";
 
     public static boolean blockerEnabled = true;
     public static boolean debugEnabled = true;
-    public static String filterPrefix = "[S]";
+    public static String filterRules = DEFAULT_FILTER_RULES;
     public static String whitelist = DEFAULT_WHITELIST;
 
     public static void load() {
@@ -24,8 +25,20 @@ public class SDRConfig {
                 properties.load(input);
                 blockerEnabled = Boolean.parseBoolean(properties.getProperty("blockerEnabled", "true"));
                 debugEnabled = Boolean.parseBoolean(properties.getProperty("debugEnabled", "true"));
-                filterPrefix = properties.getProperty("filterPrefix", "[S]");
                 
+                // Load filter rules
+                String savedRules = properties.getProperty("filterRules", "");
+                if (!savedRules.isEmpty()) {
+                    try {
+                        filterRules = new String(Base64.getDecoder().decode(savedRules), StandardCharsets.UTF_8);
+                    } catch (Exception e) {
+                        filterRules = savedRules.replace("\\n", "\n");
+                    }
+                } else {
+                    filterRules = DEFAULT_FILTER_RULES;
+                }
+
+                // Load whitelist
                 String savedWhitelist = properties.getProperty("whitelist", "");
                 if (!savedWhitelist.isEmpty()) {
                     try {
@@ -49,9 +62,12 @@ public class SDRConfig {
             Files.createDirectories(CONFIG_PATH.getParent());
             properties.setProperty("blockerEnabled", String.valueOf(blockerEnabled));
             properties.setProperty("debugEnabled", String.valueOf(debugEnabled));
-            properties.setProperty("filterPrefix", filterPrefix);
             
-            // Base64 encode the multiline whitelist to prevent formatting issues in properties files
+            // Base64 encode the multiline filterRules
+            String encodedRules = Base64.getEncoder().encodeToString(filterRules.getBytes(StandardCharsets.UTF_8));
+            properties.setProperty("filterRules", encodedRules);
+            
+            // Base64 encode the multiline whitelist
             String encodedWhitelist = Base64.getEncoder().encodeToString(whitelist.getBytes(StandardCharsets.UTF_8));
             properties.setProperty("whitelist", encodedWhitelist);
 
@@ -61,6 +77,13 @@ public class SDRConfig {
         } catch (IOException e) {
             SouthsideDebugRemover.LOGGER.error("Failed to save config", e);
         }
+    }
+
+    public static String[] getFilterRulesLines() {
+        if (filterRules == null || filterRules.isEmpty()) {
+            return new String[0];
+        }
+        return filterRules.split("\\r?\\n");
     }
 
     public static String[] getWhitelistLines() {

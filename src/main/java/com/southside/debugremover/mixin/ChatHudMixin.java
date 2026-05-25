@@ -35,10 +35,17 @@ public abstract class ChatHudMixin {
         }
 
         String plainText = message.getString();
-        String prefix = SDRConfig.filterPrefix;
         
-        // Detect and intercept custom debug messages
-        if (prefix != null && !prefix.isEmpty() && plainText.startsWith(prefix)) {
+        // Check if the message matches any of the filter rules
+        boolean matchesFilter = false;
+        for (String rule : SDRConfig.getFilterRulesLines()) {
+            if (rule != null && !rule.trim().isEmpty() && plainText.startsWith(rule)) {
+                matchesFilter = true;
+                break;
+            }
+        }
+
+        if (matchesFilter) {
             // Check whitelist lines (allow dynamic whitelist items)
             for (String rule : SDRConfig.getWhitelistLines()) {
                 if (rule != null && !rule.trim().isEmpty() && plainText.contains(rule)) {
