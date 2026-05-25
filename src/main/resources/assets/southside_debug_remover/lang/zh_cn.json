@@ -1,0 +1,6 @@
+{
+  "key.southside_debug_remover.toggle_blocker": "快捷切换拦截功能",
+  "key.southside_debug_remover.toggle_debug": "快捷切换调试提示",
+  "key.southside_debug_remover.open_gui": "打开 SDR 配置界面",
+  "category.southside_debug_remover": "Southside Debug Remover"
+}

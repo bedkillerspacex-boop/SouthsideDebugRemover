@@ -1,0 +1,6 @@
+{
+  "key.southside_debug_remover.toggle_blocker": "Toggle Blocker Feature",
+  "key.southside_debug_remover.toggle_debug": "Toggle Debug Display",
+  "key.southside_debug_remover.open_gui": "Open SDR Config GUI",
+  "category.southside_debug_remover": "Southside Debug Remover"
+}

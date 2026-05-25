@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "southside_debug_remover",
+  "version": "${version}",
+  "name": "SouthsideDebugRemover",
+  "description": "A Fabric mod that removes specific debug screens and information.",
+  "authors": [
+    "Southside Team"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/southside_debug_remover/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.southside.debugremover.SouthsideDebugRemover"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "southside_debug_remover.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
